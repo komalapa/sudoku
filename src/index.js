@@ -87,15 +87,13 @@ function printMatrix(matrix){
   console.log(output)
   return output
 }
- module.exports = function solveSudoku(matrix, row=0, col=0) {  
+ module.exports = function solveSudoku(matrix) {  
 // function solveSudoku(matrix, col = 0, row = 0) {
-  if (isSolved(matrix)) return matrix;
-  row++;
-  if (row > SIZE -1){
-    col++
-    row = 0;
+  if (isSolved(matrix)) {
+    printMatrix(matrix)
+    return matrix;
   }
-  if (col >= SIZE-1 && row >= SIZE-2) return false;
+  
   for (let i=0; i<SIZE; i++){
     for (let j=0; j<SIZE; j++){
       if (matrix[i][j] === 0){
@@ -108,7 +106,11 @@ function printMatrix(matrix){
             // printMatrix(matrix);
             const solution = solveSudoku(matrix, i,j);
             //console.log(i,j,test,solution)
-            if (solution) return solution
+            if (solution){
+              // console.log('solution')
+              // printMatrix(solution)
+              return solution
+            } 
             matrix[i][j] = 0
           } 
           
@@ -144,21 +146,21 @@ const initial = [
 ];
 // const m = solveSudoku(initial)
 // printMatrix(m)
-// function isSolvedTEST(initial, sudoku) {
-//   for (let i = 0; i < 9; i++) {
-//     let [r,c] = [Math.floor(i/3)*3,(i%3)*3];
-//     if (
-//         (sudoku[i].reduce((s,v)=>(s.delete(v), s), new Set(DIGITS)).size != 0) ||
-//         (sudoku.reduce((s,v)=>(s.delete(v[i]), s), new Set(DIGITS)).size != 0) ||
-//         (sudoku.slice(r,r+3).reduce((s,v)=>v.slice(c,c+3).reduce((s,v)=>(s.delete(v), s), s), new Set(DIGITS)).size != 0)
-//       ) return false;
-//   }
-//   return initial.every((row, rowIndex) => {
-//     return row.every((num, colIndex) => {
-//       return num === 0 || sudoku[rowIndex][colIndex] === num;
-//     });
-//   });
-// }
+function isSolvedTEST(initial, sudoku) {
+  for (let i = 0; i < 9; i++) {
+    let [r,c] = [Math.floor(i/3)*3,(i%3)*3];
+    if (
+        (sudoku[i].reduce((s,v)=>(s.delete(v), s), new Set(DIGITS)).size != 0) ||
+        (sudoku.reduce((s,v)=>(s.delete(v[i]), s), new Set(DIGITS)).size != 0) ||
+        (sudoku.slice(r,r+3).reduce((s,v)=>v.slice(c,c+3).reduce((s,v)=>(s.delete(v), s), s), new Set(DIGITS)).size != 0)
+      ) return false;
+  }
+  return initial.every((row, rowIndex) => {
+    return row.every((num, colIndex) => {
+      return num === 0 || sudoku[rowIndex][colIndex] === num;
+    });
+  });
+}
 // console.log(isSolvedTEST(initial,m))
 
 //  module.exports = function solveSudoku(matrix) {
